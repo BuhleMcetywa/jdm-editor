@@ -122,5 +122,12 @@
   "peerDependencies": {
     "react": ">= 18",
     "react-dom": ">= 18"
-  }
+  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "build:watch": "vite build --watch"
+}
+
+
 }
