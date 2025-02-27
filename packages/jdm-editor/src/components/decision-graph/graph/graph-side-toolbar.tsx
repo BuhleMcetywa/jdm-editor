@@ -12,10 +12,9 @@ import { NodeKind } from '../nodes/specifications/specification-types';
 const DecisionContentType = 'application/vnd.gorules.decision';
 
 // API endpoint configuration
-const API_ENDPOINT = process.env.REACT_APP_UPLOAD_ENDPOINT || '/api/decision-graphs';
 
 export type GraphSideToolbarProps = {
-  //
+ 
 };
 
 export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
@@ -117,153 +116,153 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
     }
   };
 
-  // New function to upload JSON to an endpoint
-  const uploadToEndpoint = async () => {
-    try {
-      const { name } = decisionGraphRaw.stateStore.getState();
-      const { decisionGraph } = decisionGraphRaw.stateStore.getState();
+  // // New function to upload JSON to an endpoint
+  // const uploadToEndpoint = async () => {
+  //   try {
+  //     const { name } = decisionGraphRaw.stateStore.getState();
+  //     const { decisionGraph } = decisionGraphRaw.stateStore.getState();
       
-      // Validate the decision graph against schema
-      const modelParsed = decisionModelSchema.safeParse({
-        nodes: decisionGraph.nodes,
-        edges: decisionGraph.edges,
-        settings: decisionGraph.settings,
-      });
+  //     // Validate the decision graph against schema
+  //     const modelParsed = decisionModelSchema.safeParse({
+  //       nodes: decisionGraph.nodes,
+  //       edges: decisionGraph.edges,
+  //       settings: decisionGraph.settings,
+  //     });
 
-      if (!modelParsed.success) {
-        console.log(modelParsed.error?.message);
-        message.error(modelParsed.error?.message);
-        return;
-      }
+  //     if (!modelParsed.success) {
+  //       console.log(modelParsed.error?.message);
+  //       message.error(modelParsed.error?.message);
+  //       return;
+  //     }
       
-      // Prepare data for upload
-      const graphId = name.replaceAll('.json', '');
-      const timestamp = new Date().toISOString();
+  //     // Prepare data for upload
+  //     const graphId = name.replaceAll('.json', '');
+  //     const timestamp = new Date().toISOString();
       
-      const payload = {
-        id: graphId,
-        timestamp,
-        name: graphId,
-        contentType: DecisionContentType,
-        data: {
-          nodes: decisionGraph.nodes,
-          edges: decisionGraph.edges,
-          settings: decisionGraph.settings,
-        }
-      };
+  //     const payload = {
+  //       id: graphId,
+  //       timestamp,
+  //       name: graphId,
+  //       contentType: DecisionContentType,
+  //       data: {
+  //         nodes: decisionGraph.nodes,
+  //         edges: decisionGraph.edges,
+  //         settings: decisionGraph.settings,
+  //       }
+  //     };
       
-      // Send to API endpoint
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+  //     // Send to API endpoint
+  //     const response = await fetch(API_ENDPOINT, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
       
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || `Server responded with status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json().catch(() => null);
+  //       throw new Error(errorData?.message || `Server responded with status: ${response.status}`);
+  //     }
       
-      const responseData = await response.json();
+  //     const responseData = await response.json();
       
-      message.success('Decision graph successfully uploaded to server!');
-      return responseData;
-    } catch (e: any) {
-      console.error('Upload error:', e);
-      message.error(`Failed to upload: ${e.message}`);
-    }
-  };
+  //     message.success('Decision graph successfully uploaded to server!');
+  //     return responseData;
+  //   } catch (e: any) {
+  //     console.error('Upload error:', e);
+  //     message.error(`Failed to upload: ${e.message}`);
+  //   }
+  // };
 
-  // New function to handle file upload to endpoint
-  const uploadFileToEndpoint = async () => {
-    try {
-      // Prompt for file selection
-      fileInput.current?.click();
+  // // New function to handle file upload to endpoint
+  // const uploadFileToEndpoint = async () => {
+  //   try {
+  //     // Prompt for file selection
+  //     fileInput.current?.click();
       
-      // The actual upload will happen in a separate function after file selection
-    } catch (e: any) {
-      message.error(`Failed to start file upload: ${e.message}`);
-    }
-  };
+  //     // The actual upload will happen in a separate function after file selection
+  //   } catch (e: any) {
+  //     message.error(`Failed to start file upload: ${e.message}`);
+  //   }
+  // };
 
-  // Function to handle the file selection and upload to endpoint
-  const handleFileUploadToEndpoint = async (event: any) => {
-    const fileList = event?.target?.files as FileList;
-    if (!fileList || fileList.length === 0) return;
+  // // Function to handle the file selection and upload to endpoint
+  // const handleFileUploadToEndpoint = async (event: any) => {
+  //   const fileList = event?.target?.files as FileList;
+  //   if (!fileList || fileList.length === 0) return;
     
-    const file = fileList[0];
-    const formData = new FormData();
-    formData.append('file', file);
+  //   const file = fileList[0];
+  //   const formData = new FormData();
+  //   formData.append('file', file);
     
-    try {
-      message.loading('Validating and uploading file...');
+  //   try {
+  //     message.loading('Validating and uploading file...');
       
-      // First, validate the file
-      const reader = new FileReader();
+  //     // First, validate the file
+  //     const reader = new FileReader();
       
-      // Create a promise to handle the file reading
-      const readFilePromise = new Promise<any>((resolve, reject) => {
-        reader.onload = (e) => {
-          try {
-            const content = e.target?.result as string;
-            const parsed = JSON.parse(content);
+  //     // Create a promise to handle the file reading
+  //     const readFilePromise = new Promise<any>((resolve, reject) => {
+  //       reader.onload = (e) => {
+  //         try {
+  //           const content = e.target?.result as string;
+  //           const parsed = JSON.parse(content);
             
-            if (parsed?.contentType !== DecisionContentType) {
-              reject(new Error('Invalid content type'));
-              return;
-            }
+  //           if (parsed?.contentType !== DecisionContentType) {
+  //             reject(new Error('Invalid content type'));
+  //             return;
+  //           }
             
-            const nodes: DecisionNode[] = Array.isArray(parsed?.nodes) ? parsed.nodes : [];
-            const nodeIds = nodes.map((node) => node.id);
+  //           const nodes: DecisionNode[] = Array.isArray(parsed?.nodes) ? parsed.nodes : [];
+  //           const nodeIds = nodes.map((node) => node.id);
             
-            const edges: DecisionEdge[] = (parsed.edges as DecisionEdge[]).filter(
-              (edge) => nodeIds.includes(edge?.targetId) && nodeIds.includes(edge?.sourceId),
-            );
+  //           const edges: DecisionEdge[] = (parsed.edges as DecisionEdge[]).filter(
+  //             (edge) => nodeIds.includes(edge?.targetId) && nodeIds.includes(edge?.sourceId),
+  //           );
             
-            const modelParsed = decisionModelSchema.safeParse({
-              nodes,
-              edges,
-              settings: parsed?.settings,
-            });
+  //           const modelParsed = decisionModelSchema.safeParse({
+  //             nodes,
+  //             edges,
+  //             settings: parsed?.settings,
+  //           });
             
-            if (!modelParsed.success) {
-              reject(new Error(modelParsed.error?.message || 'Invalid schema'));
-              return;
-            }
+  //           if (!modelParsed.success) {
+  //             reject(new Error(modelParsed.error?.message || 'Invalid schema'));
+  //             return;
+  //           }
             
-            resolve(parsed);
-          } catch (error) {
-            reject(error);
-          }
-        };
+  //           resolve(parsed);
+  //         } catch (error) {
+  //           reject(error);
+  //         }
+  //       };
         
-        reader.onerror = () => reject(new Error('Failed to read file'));
+  //       reader.onerror = () => reject(new Error('Failed to read file'));
         
-        reader.readAsText(file);
-      });
+  //       reader.readAsText(file);
+  //     });
       
-      // Wait for file validation
-      await readFilePromise;
+  //     // Wait for file validation
+  //     await readFilePromise;
       
-      // If validation succeeded, upload to endpoint
-      const response = await fetch(`${API_ENDPOINT}/upload`, {
-        method: 'POST',
-        body: formData,
-      });
+  //     // If validation succeeded, upload to endpoint
+  //     const response = await fetch(`${API_ENDPOINT}/upload`, {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
       
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || `Server responded with status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json().catch(() => null);
+  //       throw new Error(errorData?.message || `Server responded with status: ${response.status}`);
+  //     }
       
-      message.success('File successfully uploaded and validated!');
-    } catch (e: any) {
-      console.error('File upload error:', e);
-      message.error(`Failed to upload file: ${e.message}`);
-    }
-  };
+  //     message.success('File successfully uploaded and validated!');
+  //   } catch (e: any) {
+  //     console.error('File upload error:', e);
+  //     message.error(`Failed to upload file: ${e.message}`);
+  //   }
+  // };
 
   const downloadJDM = async () => {
     try {
@@ -328,16 +327,16 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
       label: 'Upload Excel',
       onClick: () => excelFileInput?.current?.click?.(),
     },
-    {
-      key: 'upload-current-to-server',
-      label: 'Upload Current to Server',
-      onClick: () => uploadToEndpoint(),
-    },
-    {
-      key: 'upload-file-to-server',
-      label: 'Upload File to Server',
-      onClick: () => uploadFileToEndpoint(),
-    },
+    // {
+    //   key: 'upload-current-to-server',
+    //   label: 'Upload Current to Server',
+    //   onClick: () => uploadToEndpoint(),
+    // },
+    // {
+    //   key: 'upload-file-to-server',
+    //   label: 'Upload File to Server',
+    //   onClick: () => uploadFileToEndpoint(),
+    // },
   ];
 
   const downloadItems: MenuProps['items'] = [
