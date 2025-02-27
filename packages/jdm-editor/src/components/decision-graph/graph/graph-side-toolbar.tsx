@@ -11,7 +11,6 @@ import { NodeKind } from '../nodes/specifications/specification-types';
 const DecisionContentType = 'application/vnd.gorules.decision';
 
 // API endpoint configuration
-
 const API_ENDPOINT = import.meta.env.VITE_UPLOAD_ENDPOINT ?? 'http://localhost:5000/api/proxy/jdm/decisions';
 
 export type GraphSideToolbarProps = {
@@ -22,6 +21,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
   const decisionGraphRaw = useDecisionGraphRaw();
   const fileInput = useRef<HTMLInputElement>(null);
   const excelFileInput = useRef<HTMLInputElement>(null);
+  const serverFileInput = useRef<HTMLInputElement>(null);
 
   const { setDecisionGraph, setActivePanel } = useDecisionGraphActions();
   const { disabled, panels, activePanel } = useDecisionGraphState(({ disabled, panels, activePanel }) => ({
@@ -117,7 +117,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
     }
   };
 
-  // New function to upload JSON to an endpoint
+  // Function to upload current graph to endpoint
   const uploadToEndpoint = async () => {
     try {
       const { name } = decisionGraphRaw.stateStore.getState();
@@ -176,19 +176,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
     }
   };
 
-  // New function to handle file upload to endpoint
-  const uploadFileToEndpoint = async () => {
-    try {
-      // Prompt for file selection
-      fileInput.current?.click();
-      
-      // The actual upload will happen in a separate function after file selection
-    } catch (e: any) {
-      message.error(`Failed to start file upload: ${e.message}`);
-    }
-  };
-
-  // Function to handle the file selection and upload to endpoint
+  // Function to handle file selection for server upload
   const handleFileUploadToEndpoint = async (event: any) => {
     const fileList = event?.target?.files as FileList;
     if (!fileList || fileList.length === 0) return;
@@ -331,12 +319,12 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
     {
       key: 'upload-current-to-server',
       label: 'Upload Current to Server',
-      onClick: () => uploadToEndpoint(),
+      onClick: uploadToEndpoint,
     },
     {
       key: 'upload-file-to-server',
       label: 'Upload File to Server',
-      onClick: () => uploadFileToEndpoint(),
+      onClick: () => serverFileInput?.current?.click?.(),
     },
   ];
 
@@ -344,12 +332,25 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
     {
       key: 'download-json',
       label: 'Download JSON',
-      onClick: () => downloadJDM(),
+      onClick: downloadJDM,
     },
     {
       key: 'download-excel',
       label: 'Download Excel',
       onClick: () => downloadJDMExcel(),
+    },
+  ];
+
+  const serverItems: MenuProps['items'] = [
+    {
+      key: 'upload-current-to-server',
+      label: 'Upload Current to Server',
+      onClick: uploadToEndpoint,
+    },
+    {
+      key: 'upload-file-to-server',
+      label: 'Upload File to Server',
+      onClick: () => serverFileInput?.current?.click?.(),
     },
   ];
 
@@ -375,23 +376,26 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
           (event.target as any).value = null;
         }}
       />
+      <input
+        hidden
+        accept='application/json'
+        type='file'
+        ref={serverFileInput}
+        onChange={handleFileUploadToEndpoint}
+        onClick={(event) => {
+          (event.target as any).value = null;
+        }}
+      />
       <div className={'grl-dg__aside__side-bar'}>
         <div className={'grl-dg__aside__side-bar__top'}>
-          {!disabled && (
-            <Dropdown menu={{ items: uploadItems }} placement='bottomRight' trigger={['click']} arrow>
-              <Button type={'text'} disabled={disabled} icon={<CloudUploadOutlined />} />
-            </Dropdown>
-          )}
+          <Dropdown menu={{ items: uploadItems }} placement='bottomRight' trigger={['click']} arrow>
+            <Button type={'text'} disabled={disabled} icon={<CloudUploadOutlined />} />
+          </Dropdown>
           <Dropdown menu={{ items: downloadItems }} placement='bottomRight' trigger={['click']} arrow>
             <Button type={'text'} icon={<CloudDownloadOutlined />} />
           </Dropdown>
-       
-            <Dropdown menu={{ items: uploadItems }} placement='bottomRight' trigger={['click']} arrow>
-              <Button type={'text'} disabled={disabled} icon={<CloudUploadOutlined />} />
-            </Dropdown>
-         
-          <Dropdown menu={{ items: uploadItems }} placement='bottomRight' trigger={['click']} arrow>
-            <Button type={'text'} icon={<CloudUploadOutlined  />} />
+          <Dropdown menu={{ items: serverItems }} placement='bottomRight' trigger={['click']} arrow>
+            <Button type={'text'} icon={<CloudServerOutlined />} />
           </Dropdown>
         </div>
         <div className={'grl-dg__aside__side-bar__bottom'}>
