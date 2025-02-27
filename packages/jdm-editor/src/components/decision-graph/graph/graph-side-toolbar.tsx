@@ -12,6 +12,7 @@ import { NodeKind } from '../nodes/specifications/specification-types';
 const DecisionContentType = 'application/vnd.gorules.decision';
 
 // API endpoint configuration
+//const API_ENDPOINT = process.env.REACT_APP_UPLOAD_ENDPOINT || '/api/decision-graphs';
 
 export type GraphSideToolbarProps = {
  
