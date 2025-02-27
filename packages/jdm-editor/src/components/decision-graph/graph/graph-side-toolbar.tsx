@@ -11,7 +11,7 @@ import { NodeKind } from '../nodes/specifications/specification-types';
 const DecisionContentType = 'application/vnd.gorules.decision';
 
 // API endpoint configuration
-const API_ENDPOINT = import.meta.env.VITE_UPLOAD_ENDPOINT ?? 'http://localhost:5000/api/proxy/jdm/decisions/upload';
+const API_ENDPOINT = import.meta.env.VITE_UPLOAD_ENDPOINT ?? 'http://localhost:5000/api/proxy/jdm/decisions';
 
 export type GraphSideToolbarProps = {
   //
