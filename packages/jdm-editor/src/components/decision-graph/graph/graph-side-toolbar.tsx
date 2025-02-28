@@ -11,7 +11,7 @@ import { NodeKind } from '../nodes/specifications/specification-types';
 const DecisionContentType = 'application/vnd.gorules.decision';
 
 // API endpoint configuration
-const API_ENDPOINT = import.meta.env.VITE_UPLOAD_ENDPOINT ?? 'http://localhost:5000/api/proxy/jdm/decisions';
+const API_ENDPOINT = import.meta.env.VITE_UPLOAD_ENDPOINT ?? 'http://localhost:5000/';
 
 export type GraphSideToolbarProps = {
   //
@@ -153,7 +153,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
       };
       
       // Send to API endpoint
-      const response = await fetch(API_ENDPOINT, {
+      const response = await fetch(`${API_ENDPOINT}/api/proxy/jdm/decisions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
       await readFilePromise;
       
       // If validation succeeded, upload to endpoint
-      const response = await fetch(`${API_ENDPOINT}`, {
+      const response = await fetch(`${API_ENDPOINT}/api/proxy/jdm/upload`, {
         method: 'POST',
         body: formData,
       });
