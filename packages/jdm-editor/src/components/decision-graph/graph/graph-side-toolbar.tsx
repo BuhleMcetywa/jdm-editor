@@ -236,7 +236,7 @@ export const GraphSideToolbar: React.FC<GraphSideToolbarProps> = () => {
       await readFilePromise;
       
       // If validation succeeded, upload to endpoint
-      const response = await fetch(`${API_ENDPOINT}/upload`, {
+      const response = await fetch(`${API_ENDPOINT}`, {
         method: 'POST',
         body: formData,
       });
